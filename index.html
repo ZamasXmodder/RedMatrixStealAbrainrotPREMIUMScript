@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Premium Access</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #ff0000;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Matrix Rain Effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .matrix-column {
+            position: absolute;
+            font-family: monospace;
+            font-size: 20px;
+            animation: matrix-fall linear infinite;
+            color: #ff0000;
+            text-shadow: 0 0 5px #ff0000;
+        }
+
+        @keyframes matrix-fall {
+            0% {
+                top: -100%;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+            padding-bottom: 60px; /* Space for footer */
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% {
+                text-shadow: 
+                    2px 0 #ff0000,
+                    -2px 0 #ff0000,
+                    0 0 10px #ff0000,
+                    0 0 20px #ff0000;
+            }
+            25% {
+                text-shadow: 
+                    -2px 0 #ff0000,
+                    2px 0 #ff0000,
+                    0 0 15px #ff0000,
+                    0 0 25px #ff0000;
+            }
+        }
+
+        .main-title {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: pulse 2s ease-in-out infinite;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .subtitle {
+            font-size: clamp(1.2rem, 5vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: #ff3333;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        .get-key-btn {
+            padding: 15px 40px;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: 700;
+            background: transparent;
+            color: #ff0000;
+            border: 3px solid #ff0000;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .get-key-btn:hover {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 30px #ff0000, inset 0 0 10px rgba(255, 0, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .get-key-btn:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.5), transparent);
+            transition: left 0.5s;
+        }
+
+        .get-key-btn:hover:before {
+            left: 100%;
+        }
+
+        /* Login Panel */
+        .login-panel {
+            width: 400px;
+            max-width: 100%;
+            background: rgba(20, 0, 0, 0.95);
+            border-left: 3px solid #ff0000;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: -10px 0 30px rgba(255, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .login-title {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+        }
+
+        .japanese-text {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            writing-mode: vertical-rl;
+            opacity: 0.5;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ff6666;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: transparent;
+            color: #ff0000;
+            border: 2px solid #ff0000;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .login-btn:hover {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 15px;
+            text-align: center;
+            z-index: 100;
+            font-size: 0.7rem;
+            color: rgba(255, 0, 0, 0.6);
+            letter-spacing: 1px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .footer-divider {
+            color: rgba(255, 0, 0, 0.3);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .loading-screen.active {
+            display: flex;
+        }
+
+        .loading-text {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        .loading-bar {
+            width: 90%;
+            max-width: 400px;
+            height: 30px;
+            border: 2px solid #ff0000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ff3333);
+            width: 0;
+            transition: width 4s linear;
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .loading-screen.active .loading-progress {
+            width: 100%;
+        }
+
+        .matrix-text {
+            position: absolute;
+            bottom: 50px;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            opacity: 0.7;
+        }
+
+        /* Japanese decorative elements */
+        .japanese-decoration {
+            position: absolute;
+            font-size: clamp(3rem, 10vw, 8rem);
+            opacity: 0.05;
+            color: #ff0000;
+            z-index: 1;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .deco-1 {
+            top: 10%;
+            left: 10%;
+        }
+
+        .deco-2 {
+            bottom: 15%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+
+        .deco-3 {
+            top: 50%;
+            left: 5%;
+            animation-delay: 2.5s;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding-bottom: 80px;
+            }
+
+            .main-content {
+                min-height: 50vh;
+                padding: 30px 20px;
+            }
+
+            .login-panel {
+                width: 100%;
+                border-left: none;
+                border-top: 3px solid #ff0000;
+                padding: 30px 20px;
+                box-shadow: 0 -10px 30px rgba(255, 0, 0, 0.3);
+            }
+
+            .japanese-text {
+                writing-mode: horizontal-tb;
+                top: 10px;
+                right: 10px;
+                font-size: 1rem;
+            }
+
+            .main-title {
+                letter-spacing: 2px;
+            }
+
+            .subtitle {
+                letter-spacing: 1px;
+            }
+
+            .get-key-btn {
+                padding: 12px 30px;
+            }
+
+            .footer {
+                font-size: 0.6rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .footer-divider {
+                display: none;
+            }
+
+            .japanese-decoration {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .login-panel {
+                padding: 20px 15px;
+            }
+
+            .input-group input {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .login-btn {
+                font-size: 1rem;
+                padding: 12px;
+            }
+        }
+
+        /* Landscape mode for mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container {
+                flex-direction: row;
+            }
+
+            .main-content {
+                min-height: auto;
+                padding: 20px;
+            }
+
+            .login-panel {
+                width: 350px;
+                border-top: none;
+                border-left: 3px solid #ff0000;
+                padding: 20px;
+            }
+
+            .main-title {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 20px;
+            }
+
+            .japanese-decoration {
+                display: none;
+            }
+        }
+
+        /* Tablet Portrait */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .login-panel {
+                width: 350px;
+                padding: 30px;
+            }
+
+            .main-title {
+                font-size: 3rem;
+            }
+
+            .subtitle {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* High resolution screens */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1920px;
+                margin: 0 auto;
+            }
+
+            .login-panel {
+                width: 500px;
+                padding: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Rain Background -->
+    <div class="matrix-bg" id="matrixBg"></div>
+
+    <!-- Japanese Decorations -->
+    <div class="japanese-decoration deco-1">侍</div>
+    <div class="japanese-decoration deco-2">忍</div>
+    <div class="japanese-decoration deco-3">武</div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <h1 class="main-title">TRIAL FREE KEY</h1>
+            <h2 class="subtitle">TRIAL 4 DAYS</h2>
+            <button class="get-key-btn" onclick="generateKey()">GET FREE KEY</button>
+        </div>
+
+        <!-- Login Panel -->
+        <div class="login-panel">
+            <div class="japanese-text">プレミアム</div>
+            <h2 class="login-title">ONLY PREMIUM USERS</h2>
+            
+            <div class="input-group">
+                <label for="username">Usuario</label>
+                <input type="text" id="username" placeholder="Enter username">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" placeholder="Enter password">
+            </div>
+            
+            <button class="login-btn" onclick="handleLogin()">LOGIN</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-item">
+                <span>© 2025 ZAMAS</span>
+            </div>
+            <span class="footer-divider">|</span>
+            <div class="footer-item">
+                <span>MATRIX SYSTEM v2.0</span>
+            </div>
+            <span class="footer-divider">|</span>
+            <div class="footer-item">
+                <span>CREATED: JANUARY 2025</span>
+            </div>
+            <span class="footer-divider">|</span>
+            <div class="footer-item">
+                <span>ALL RIGHTS RESERVED</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">Generando tu KEY...</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        <div class="matrix-text">マトリックス</div>
+    </div>
+
+    <script>
+        // Matrix rain effect
+        function createMatrixRain() {
+            const matrixBg = document.getElementById('matrixBg');
+            const characters = '田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン01';
+            
+            // Adjust number of columns based on screen width
+            const columnCount = window.innerWidth > 768 ? 15 : 8;
+            
+            for (let i = 0; i < columnCount; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = Math.random() * 100 + '%';
+                column.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                column.style.animationDelay = Math.random() * 5 + 's';
+                
+                let text = '';
+                for (let j = 0; j < 30; j++) {
+                    text += characters[Math.floor(Math.random() * characters.length)] + '<br>';
+                }
+                column.innerHTML = text;
+                matrixBg.appendChild(column);
+            }
+        }
+
+        // Generate key function
+        function generateKey() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.classList.add('active');
+            
+            setTimeout(() => {
+                window.location.href = 'https://www.roblox.com/share?code=4678e6da58e7384f86dfcd88e22799c7&type=Server';
+            }, 4000);
+        }
+
+        // Login handler
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('Por favor ingresa usuario y contraseña');
+                return;
+            }
+            
+            // Simulated login effect
+            alert('Acceso Premium: Verificando credenciales...');
+        }
+
+        // Initialize matrix rain on load
+        window.addEventListener('load', createMatrixRain);
+
+        // Recreate matrix rain on resize for better performance
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                const matrixBg = document.getElementById('matrixBg');
+                matrixBg.innerHTML = '';
+                createMatrixRain();
+            }, 250);
+        });
+    </script>
+</body>
+</html>
